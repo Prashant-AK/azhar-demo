@@ -1,52 +1,61 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Paper, Stack, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 const EditInfo = (props) => {
-  const { populate } = props;
-  console.log("populate", populate);
+  const { populate, handleSubmit, id } = props;
+  const [data, setData] = useState(populate);
+  // console.log("populate", populate);
   return (
-    <Grid
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-    >
-      <Paper elevation={24}>
-        <Typography variant="h3"> Edit form </Typography>
-        <form>
-          <Stack>
-            <Grid container>
-              <Grid xs={12} sm={6}>
-                {" "}
-                <TextField
-                  id="standard-basic"
-                  label="Sender"
-                  variant="standard"
-                  value={populate?.sender}
-                  type="text"
-                />{" "}
-              </Grid>
-              <Grid xs={12} sm={6}></Grid>
+    <Paper align="center">
+      <Typography variant="h3"> Edit form </Typography>
+      <form onSubmit={handleSubmit(id, data)}>
+        <Stack>
+          <Grid container>
+            <Grid xs={6}>
+              {" "}
               <TextField
                 id="standard-basic"
-                label="Email"
+                label="Notification Id"
                 variant="standard"
-                type="email"
-                value={populate?.email}
+                value={data.notificationId}
+                type="text"
               />{" "}
             </Grid>
-
-            <Grid container>
-              <Grid xs={12}>
-                {" "}
-                <TextField
-                  id="standard-basic"
-                  label="message"
-                  variant="standard"
-                />{" "}
-              </Grid>
+            <Grid xs={6}>
+              <TextField
+                id="standard-basic"
+                label="Sender UID"
+                variant="standard"
+                type="text"
+                value={data.senderUid}
+              />
             </Grid>
-          </Stack>
-        </form>
-      </Paper>
-    </Grid>
+          </Grid>
+
+          <Grid container>
+            <Grid xs={12}>
+              <TextField
+                id="standard-basic"
+                label="Message"
+                variant="standard"
+                value={data.message}
+                onChange={(
+                  e //console.log(e.target.value)
+                ) => setData({ ...data, [data.message]: e.target.value })}
+              />
+            </Grid>
+          </Grid>
+          <Button type="submit">Submit</Button>
+        </Stack>
+      </form>
+    </Paper>
   );
 };
 

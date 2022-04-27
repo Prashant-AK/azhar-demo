@@ -43,12 +43,12 @@ const CustomTable = (props) => {
               <StyledTableCell align="right">senderUid</StyledTableCell>
               <StyledTableCell align="right">receiverUid</StyledTableCell>
               <StyledTableCell align="right">oneLiner</StyledTableCell>
-              {/* <StyledTableCell align="right">Message</StyledTableCell> */}
+              <StyledTableCell align="right">Message</StyledTableCell>
               <StyledTableCell align="right">notificationType</StyledTableCell>
               <StyledTableCell align="right">Edit</StyledTableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          {/* <TableBody>
             {rows.map((row, index) => (
               <StyledTableRow key={row.sno}>
                 <StyledTableCell component="th" scope="row">
@@ -67,10 +67,10 @@ const CustomTable = (props) => {
                 </StyledTableCell>
               </StyledTableRow>
             ))}
-          </TableBody>
-          {/* <TableBody>
-            {apiData.map((row) => (
-              <StyledTableRow key={row.sno}>
+          </TableBody> */}
+          <TableBody>
+            {apiData.map((row, index) => (
+              <StyledTableRow key={row.notificationId}>
                 <StyledTableCell component="th" scope="row">
                   {row.notificationId}
                 </StyledTableCell>
@@ -85,12 +85,14 @@ const CustomTable = (props) => {
                 </StyledTableCell>
                 <StyledTableCell align="right">{row.message}</StyledTableCell>
                 <StyledTableCell align="right">
-                  {" "}
-                  <EditIcon />{" "}
+                  <Button onClick={() => displaydata(index)}>
+                    {" "}
+                    <EditIcon />
+                  </Button>
                 </StyledTableCell>
               </StyledTableRow>
             ))}
-          </TableBody> */}
+          </TableBody>
         </Table>
       </TableContainer>
     </>

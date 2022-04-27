@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import CustomTable from "./component/CustomTable";
 import EditInfo from "./Pages/EditInfo";
+import { Modal } from "@mui/material";
 
 const data = [
   {
@@ -29,7 +30,17 @@ const data = [
     action: "done",
   },
 ];
-
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -65,31 +76,38 @@ function a11yProps(index: number) {
 
 export default function App() {
   const [value, setValue] = useState(0);
-  const [apiData, setApiData] = useState({});
+  const [apiData, setApiData] = useState([]);
   const [id, setId] = useState(0);
   const [populate, setpopulate] = useState({});
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   const displaydata = (id) => {
-    console.log("id", data[id]);
-    console.log("test", populate);
-    data[id].sender = "helll";
-    setpopulate(data[id]);
+    setId(id);
+    setpopulate(apiData[id]);
+    handleOpen();
   };
-  // useEffect(() => {
-  //   fetch(
-  //     "http://api-dev.wuelev8.tech:8080/internity/api/v1/notification/?messageType=GENERAL"
-  //   )
-  //     .then((response) => response.json())
-  //     .then((json) => {
-  //       console.log("hi i am data", json);
-  //       setApiData(json);
-  //     });
-  // }, []);
-  // console.log("I am state", apiData);
+  const handleSubmit = (id, data) => {
+    let arr = apiData;
+    arr[id] = data;
+    setApiData(arr);
+    // console.log("submit", data, id);
+  };
+  useEffect(() => {
+    fetch(
+      "http://api-dev.wuelev8.tech:8080/internity/api/v1/notification/?messageType=GENERAL"
+    )
+      .then((response) => response.json())
+      .then((json) => {
+        setApiData(json);
+      });
+  }, []);
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -109,7 +127,17 @@ export default function App() {
         <CustomTable rows={data} apiData={apiData} displaydata={displaydata} />
       </TabPanel>
 
-      <EditInfo populate={populate} />
+      {/* <EditInfo populate={populate} /> */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <EditInfo populate={populate} id={id} handleSubmit={handleSubmit} />
+        </Box>
+      </Modal>
     </Box>
   );
 }
